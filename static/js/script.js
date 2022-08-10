@@ -218,9 +218,7 @@ function renderProducts() {
     removeAllChildNodes(productsList);
     let fragment = document.createDocumentFragment();
     for (let i = 0; i < dataSet.length; i++) {
-        for (let j = 0; j < dataSet[i].length; j++) {
-            fragment.appendChild(renderSingleProduct(dataSet[i][j]));
-        }
+        fragment.appendChild(renderSingleProduct(dataSet[i]));
     }
     productsList.appendChild(fragment);
 }
