@@ -93,6 +93,7 @@ MongoClient.connect('mongodb+srv://username:simple_password@medicine-bakzhan.uej
                     list.push({name:name_, img:img, price:price, category:category})
                 }
             }
+            productsCollection.deleteMany( {} )
             productsCollection.insertMany(list)
                 .then(result => {
                     res.redirect('/')
@@ -114,11 +115,11 @@ MongoClient.connect('mongodb+srv://username:simple_password@medicine-bakzhan.uej
 // [0] - optika [1] -lek sredstva i td
 // класс продукта для удобства добавления в дата сет
 class Product {
-    constructor(name, price, img, cat_id, item_id) {
+    constructor(name, price, img, category, item_id) {
         this.name = name; // название продукта
         this.price = price; // цена продукта
         this.img = img; // ссылка на фотографию продукта
-        this.category = this.category; // айди категории
+        this.category = category; // айди категории
         this.item_id = item_id; // айди продукта в категории
     }
 }

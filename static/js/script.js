@@ -16,9 +16,43 @@ httpRequest.send();
 
 // Everything is inside
 function doThings(data){
-
-let dataSet = data;
-
+    //inner arrays indexes - categories 
+    // [0] - optika [1] -lek sredstva i td
+    // класс продукта для удобства добавления в дата сет
+    class Product {
+        constructor(name, price, img, cat_id, item_id) {
+            this.name = name; // название продукта
+            this.price = price; // цена продукта
+            this.img = img; // ссылка на фотографию продукта
+            this.category = cat_id; // айди категории
+            this.item_id = item_id; // айди продукта в категории
+        }
+    }
+    let dataSet = [[],[],[],[],[]]
+    for (let index = 0; index < data.length; index++) {
+        const element = data[index];
+        let i;
+        switch (element.category) {
+            case "Оптика":
+                i = 0
+                break;
+            case "Лекарственные средства":
+                i = 1
+                break;
+            case "Детское питание":
+                i = 2
+                break;
+            case "Косметика":
+                i = 3
+                break;
+            case "Другое":
+                i = 4
+                break;
+        }
+        dataSet[i].push(new Product(element.name, element.price, element.img, i+1, element._id))
+    }
+    console.log(data)
+    console.log(dataSet)
 
 // удаление всех элементов из контейнера отображения
 function removeAllChildNodes(parent) {
@@ -159,8 +193,8 @@ function renderSingleProduct(product) {
 function renderProducts() {
     removeAllChildNodes(productsList);
     let fragment = document.createDocumentFragment();
-    for (let i = 0; i < dataSet.length; i++) {
-        fragment.appendChild(renderSingleProduct(dataSet[i]));
+    for (let i = 0; i < data.length; i++) {
+        fragment.appendChild(renderSingleProduct(data[i]));
     }
     productsList.appendChild(fragment);
 }
