@@ -28,7 +28,7 @@ function doThings(data){
             this.item_id = item_id; // айди продукта в категории
         }
     }
-    let dataSet = [[],[],[],[],[]]
+    let dataSet = [[],[],[],[],[],[]]
     for (let index = 0; index < data.length; index++) {
         const element = data[index];
         let i;
@@ -45,10 +45,14 @@ function doThings(data){
             case "Косметика":
                 i = 3
                 break;
-            case "Другое":
+            case "Медицинские приборы":
                 i = 4
                 break;
+            default:
+                i = 5
+                break;
         }
+        console.log(dataSet[i])
         dataSet[i].push(new Product(element.name, element.price, element.img, i+1, element._id))
     }
     console.log(data)
@@ -136,17 +140,34 @@ function renderShoppingCart() {
 
 
 // добавление элемента в корзину
-function addInCart(cat_id, item_id) {
-    let product = dataSet[cat_id - 1][item_id - 1]; //находим продукт, на который нажали "В корзину"
+function addInCart(item_id) {
+    let product = null;
+    for (var i = data.length - 1; i >= 0; i--) {
+        if (data[i]._id == item_id){
+            product = data[i]
+            break;
+        }
+    }
     productsInCart.push(product); //добавляем его в массив продуктов из корзины
     renderShoppingCart(); //целиком перерисовываем корзину
 }
 //
 
 // кнопка отправки заказа, при нажатии корзина очищается
-offerBtn.addEventListener('click', () => { //на клик кнопки Заказать вся корзина очищается и перерисовывается пустой
-    productsInCart = [];
-    renderShoppingCart();
+offerBtn.addEventListener('click', async () => { //на клик кнопки Заказать вся корзина очищается и перерисовывается пустой
+      try {     
+        const response = await fetch('/purchase', {
+          method: 'post',
+          body: {
+            products: productsInCart
+          }
+        });
+        console.log('Completed!', response);
+        productsInCart = [];
+        renderShoppingCart();
+      } catch(err) {
+        console.error(`Error: ${err}`);
+      }
 });
 
 //start product list block render
@@ -178,7 +199,7 @@ function renderSingleProduct(product) {
     btn.classList.add('add-to-cart');
 
     btn.addEventListener('click', () => {
-        addInCart(product.cat_id, product.item_id); //на кнопку В корзину будет вызываться функция addInCart строка кода 146
+        addInCart(product._id); //на кнопку В корзину будет вызываться функция addInCart строка кода 146
     })
 
     div.appendChild(header);

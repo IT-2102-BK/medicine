@@ -20,12 +20,16 @@
                 <i class="fas fa-search"></i>
             </div>
         </div>
+        
         <div class="shopping-cart-wrapper" id="cart">
             <div class="cart-icon">
                 <div class="items-count-circle" id="cart-counter">0</div>
                 <i class="fas fa-shopping-cart"></i>
             </div>
+            <div>
+            
             <p>Корзина</p>
+
         </div>
         <div class="categories-menu-wrapper">
             <p class="categories-header">Каталог</p>
@@ -96,26 +100,14 @@
         </div>
     </div>
 
-    <button onclick="getLocation()">Try It</button>
+<form action="/register_product" method="POST">
+    <input type="text" placeholder="name" name="name">
+    <input type="number"  placeholder="price" name="price">
+    <input type="text" placeholder="url to image" name="img">
+    <input type="text" placeholder="category" name="category">
+    <button type="submit">Submit</button>
+</form>
 
-    <p id="demo"></p>
-
-    <script>
-        const x = document.getElementById("demo");
-
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.watchPosition(showPosition);
-            } else {
-                x.innerHTML = "Geolocation is not supported by this browser.";
-            }
-        }
-
-        function showPosition(position) {
-            x.innerHTML="Latitude: " + position.coords.latitude +
-                "<br>Longitude: " + position.coords.longitude;
-        }
-    </script>
 
     <div class="footer">
         <h3 class="footer-header">© 2022, ТОО "OnlineApteka.kz"</h3>

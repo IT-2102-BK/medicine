@@ -11,24 +11,23 @@ const express = require('express');
 const bodyParser= require('body-parser')
 const app = express();
 const MongoClient = require('mongodb').MongoClient
-// import com.mongodb.MongoClientSettings
-// const MongoClientSettings = require('mongodb').MongoClientSettings
-// const MongoCredential = require('mongodb').MongoCredentials
-
-
 const hostname = '127.0.0.1';
 const port = 3000;
+const paypal = require('paypal-rest-sdk');
 
-// var mongoSettings = MongoClientSettings.FromConnectionString(config.ConnectionString);
-// mongoSettings.Credential = MongoCredential.CreateCredential("admin", config.Username, config.Password);
-// mongoSettings.useUnifiedTopology = true
+paypal.configure({
+  'mode': 'sandbox', //sandbox or live
+  'client_id': '####yourclientid######',
+  'client_secret': '####yourclientsecret#####'
+});
 
-MongoClient.connect('mongodb+srv://username:simple_password@medicine-bakzhan.uej5ngj.mongodb.net/?retryWrites=true&w=majority')
+MongoClient.connect('mongodb+srv://Bakzhan:Astana859465@cluster0.xpton.mongodb.net/?retryWrites=true&w=majority')
     .then(client =>{
         console.log("db connect success");
 
         const db = client.db('medicine')
         const productsCollection = db.collection('products')
+        const usersCollection = db.collection('users')
 
         app.use(bodyParser.urlencoded({ extended: true }))
         app.use(express.static(path.join(__dirname, 'static')))
@@ -39,6 +38,14 @@ MongoClient.connect('mongodb+srv://username:simple_password@medicine-bakzhan.uej
             db.collection('products').find().toArray()
             .then(results => {
                 res.render('index.ejs', { products: results })
+            })
+            .catch(error => console.error(error))
+        })
+
+        app.get('/regindex', (req, res) => {
+            db.collection('users').find().toArray()
+            .then(results => {
+                res.render('regindex.ejs', { products: results })
             })
             .catch(error => console.error(error))
         })
@@ -56,6 +63,14 @@ MongoClient.connect('mongodb+srv://username:simple_password@medicine-bakzhan.uej
         })
         
         app.post('/register_product', (req, res) => {
+            productsCollection.insertOne(req.body)
+                .then(result => {
+                    res.redirect('/')
+                })
+                .catch(error => console.error(error))
+        })
+
+        app.post('/regindex', (req, res) => {
             productsCollection.insertOne(req.body)
                 .then(result => {
                     res.redirect('/')
@@ -100,6 +115,52 @@ MongoClient.connect('mongodb+srv://username:simple_password@medicine-bakzhan.uej
                 })
                 .catch(error => console.error(error))
         })
+
+        app.get('/purchase',  (req, res) =>{
+            res.render('purchase.ejs', {data:req.body})
+        })
+
+        app.post('/pay', (req, res) => {
+            const create_payment_json = {
+                "intent": "sale",
+                "payer": {
+                    "payment_method": "paypal"
+                },
+                "redirect_urls": {
+                    "return_url": "http://localhost:3000/",
+                    "cancel_url": "http://localhost:3000/"
+                },
+                "transactions": [{
+                    "item_list": {
+                        "items": [{
+                            "name": "Redhock Bar Soap",
+                            "sku": "001",
+                            "price": "25.00",
+                            "currency": "USD",
+                            "quantity": 1
+                        }]
+                    },
+                    "amount": {
+                        "currency": "USD",
+                        "total": "25.00"
+                    },
+                    "description": "Washing Bar soap"
+                }]
+            };
+
+            paypal.payment.create(create_payment_json, function (error, payment) {
+              if (error) {
+                  throw error;
+              } else {
+                  for(let i = 0;i < payment.links.length;i++){
+                    if(payment.links[i].rel === 'approval_url'){
+                      res.redirect(payment.links[i].href);
+                    }
+                  }
+              }
+            });
+
+        });
         // End handlers
 
 
