@@ -11,8 +11,7 @@ const express = require('express');
 const bodyParser= require('body-parser')
 const app = express();
 const MongoClient = require('mongodb').MongoClient
-const hostname = '127.0.0.1';
-const port = 3000;
+const hostname = '0.0.0.0';
 const paypal = require('paypal-rest-sdk');
 
 paypal.configure({
