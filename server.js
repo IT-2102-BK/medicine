@@ -164,7 +164,7 @@ MongoClient.connect('mongodb+srv://Bakzhan:Astana859465@cluster0.xpton.mongodb.n
         // End handlers
 
 
-        app.listen(port, hostname, () => {
+        app.listen(process.env.PORT || 5000, hostname, () => {
             console.log(`Server running at http://${hostname}:${port}/`);
         });
     })
