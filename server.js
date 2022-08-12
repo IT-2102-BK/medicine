@@ -71,7 +71,7 @@ MongoClient.connect('mongodb+srv://Bakzhan:Astana859465@cluster0.xpton.mongodb.n
         })
 
         app.post('/regindex', (req, res) => {
-            productsCollection.insertOne(req.body)
+            usersCollection.insertOne(req.body)
                 .then(result => {
                     res.redirect('/')
                 })
@@ -184,6 +184,8 @@ class Product {
         this.item_id = item_id; // айди продукта в категории
     }
 }
+
+
 //все продукты по категориям
 // все имеющиеся продукты
 let dataSet = [
