@@ -1,7 +1,7 @@
 const path = require('path');
 const cors = require('cors');
 const corsOptions ={
-    origin:'http://localhost:3000', 
+    origin:'http://localhost:3000',
     credentials:true,
     optionSuccessStatus:200
 }
@@ -163,8 +163,8 @@ MongoClient.connect('mongodb+srv://Bakzhan:Astana859465@cluster0.xpton.mongodb.n
         // End handlers
 
 
-        app.listen(process.env.PORT || 5000, hostname, () => {
-            console.log(`Server running at http://${hostname}:${process.env.PORT || 5000}/`);
+        app.listen(process.env.PORT || 3000, hostname, () => {
+            console.log(`Server running at http://${hostname}:${process.env.PORT || 3000}/`);
         });
     })
     .catch((err)=>{
