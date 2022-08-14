@@ -5,7 +5,9 @@
   "main": "app.js",
   "scripts": {
     "dev": "nodemon server.js",
+    "postinstall": "npm run build",
     "start": "node server.js"
+
   },
   "repository": {
     "type": "git",
