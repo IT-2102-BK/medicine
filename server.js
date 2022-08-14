@@ -6,7 +6,7 @@ const corsOptions ={
     optionSuccessStatus:200
 }
 
-const DEV = true;
+const DEV = false;
 const express = require('express');
 const bodyParser= require('body-parser')
 const app = express();
@@ -16,7 +16,7 @@ const port = 3000;
 const paypal = require('paypal-rest-sdk');
 
 if (DEV){
-    hostname = '127.0.0.1'
+    hostname = '0.0.0.0'
 }
 
 paypal.configure({
