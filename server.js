@@ -6,13 +6,18 @@ const corsOptions ={
     optionSuccessStatus:200
 }
 
-
+const DEV = true;
 const express = require('express');
 const bodyParser= require('body-parser')
 const app = express();
 const MongoClient = require('mongodb').MongoClient
-const hostname = '0.0.0.0';
+var hostname = '0.0.0.0';
+const port = 3000;
 const paypal = require('paypal-rest-sdk');
+
+if (DEV){
+    hostname = '127.0.0.1'
+}
 
 paypal.configure({
   'mode': 'sandbox', //sandbox or live
@@ -126,8 +131,8 @@ MongoClient.connect('mongodb+srv://Bakzhan:Astana859465@cluster0.xpton.mongodb.n
                     "payment_method": "paypal"
                 },
                 "redirect_urls": {
-                    "return_url": "http://localhost:3000/",
-                    "cancel_url": "http://localhost:3000/"
+                    "return_url": `http://${hostname}:${process.env.PORT || port}`,
+                    "cancel_url": `http://${hostname}:${process.env.PORT || port}`
                 },
                 "transactions": [{
                     "item_list": {
@@ -163,8 +168,8 @@ MongoClient.connect('mongodb+srv://Bakzhan:Astana859465@cluster0.xpton.mongodb.n
         // End handlers
 
 
-        app.listen(process.env.PORT || 3000, hostname, () => {
-            console.log(`Server running at http://${hostname}:${process.env.PORT || 3000}/`);
+        app.listen(process.env.PORT || port, hostname, () => {
+            console.log(`Server running at http://${hostname}:${process.env.PORT || port}/`);
         });
     })
     .catch((err)=>{
