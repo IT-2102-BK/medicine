@@ -6,7 +6,7 @@ const corsOptions ={
     optionSuccessStatus:200
 }
 
-const DEV = false;
+const DEV = true;
 const express = require('express');
 const bodyParser= require('body-parser')
 const app = express();
